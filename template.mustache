@@ -1,0 +1,19 @@
+
+{{#users}}
+  User: <a href="{{html_url}}">{{summary}}</a>
+  Total days oncall: {{days_oncall}}
+  Shifts:
+  {{#shifts}}
+    Start: {{start}}
+    End: {{end}}
+    Days: {{days}}
+    +++++++++++++++++++++++++++++++++++++++++++
+  {{/shifts}}
+  Extra Hours:
+  {{#extra_hours}}
+    incident: {{incident}}
+    time spent: {{time_spent}}
+    *******************************************
+  {{/extra_hours}}
+-----------------------------------------------
+{{/users}}

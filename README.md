@@ -6,6 +6,11 @@ This script is to automate fetching information from Pagerduty.
 ## Requirement
 You need to create a [general access readonly api key](https://support.pagerduty.com/docs/api-access-keys#generate-a-general-access-rest-api-key) in pagerduty and set the **PAGERDUTY_API_KEY** environment variable with its value. You can rename *.env.sample* file to *.env* and set the value in that file as well.
 
+You also need to install python libraries. The easiest is to install it by pip.
+```
+pip3 install -r requirements.txt
+```
+
 ## Run script
 To run the script you need schedule id (the string after # when you browse to your schedule), since and until dates in d/m/y format.
 

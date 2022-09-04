@@ -32,7 +32,7 @@ def getScheduleOncallUsers(schedule_id, since, until):
                     "html_url": user["user"]["html_url"],
                     "days_oncall": 0,
                     "shifts": [],
-                    "extra_hours": []
+                    "extra_hours": [],
                 }
             # calculate the date differences in days
             # not sure how it will behave if it is not a full day
@@ -90,25 +90,31 @@ def getIncidentsforServices(service_ids, since, until):
 def setUserExtraOnCallHours(escalation_policy_id, users, since, until):
     service_ids = getEscalationPolicyServices(escalation_policy_id)
     incidents = getIncidentsforServices(service_ids, since, until)
+    incidents_notes = []
     for incident in incidents:
         incident_id = incident["id"]
         incident_notes = getIncidentNotes(incident_id)
+        incident_url = incident["html_url"]
         for note in incident_notes:
+            note["incident_url"] = incident_url
+            incidents_notes.append(note)
             note_user_id = note["user"]["id"]
             if note_user_id in users:
                 x = re.findall("^time spent:\s*([0-9hm]+)$", note["content"])
                 if (x):
                     users[note_user_id]["extra_hours"].append(
-                        {"incident": incident["html_url"], "time_spent": x[0]})
+                        {"incident": incident_url, "time_spent": x[0]})
+    return incidents_notes
 
 def main(schedule, since, until):
+    incidents_notes = []
     schedule_oncall_users, escalation_policy_id = getScheduleOncallUsers(schedule, since, until)
     if schedule_oncall_users and escalation_policy_id is not None:
-        setUserExtraOnCallHours(escalation_policy_id,
+        incidents_notes = setUserExtraOnCallHours(escalation_policy_id,
                                 schedule_oncall_users, since, until)
 
     with open('template.mustache', 'r') as f:
-        print(chevron.render(f, {"users": list(schedule_oncall_users.values())}))
+        print(chevron.render(f, {"users": list(schedule_oncall_users.values()), 'incidents_notes': incidents_notes}))
 
 if __name__ == '__main__':
     # Instantiate the parser

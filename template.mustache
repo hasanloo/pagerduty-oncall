@@ -17,3 +17,11 @@
   {{/extra_hours}}
 -----------------------------------------------
 {{/users}}
+
+AllIncidents Notes:
+{{#incidents_notes}}
+  user: {{#user}}{{summary}}{{/user}}
+  content: {{content}}
+  incident: {{incident_url}}
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+{{/incidents_notes}}
